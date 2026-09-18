@@ -1,41 +1,24 @@
-// 阻擋使用者關閉或重新整理頁面（會跳出瀏覽器預設的關閉確認）
+// 1. 攔截關閉視窗（需使用者點擊過畫面才會生效）
 window.addEventListener('beforeunload', function (e) {
   e.preventDefault();
   e.returnValue = '';
 });
 
-// 持續跳出新分頁
+// 2. 視窗炸彈函式
 function popupStorm(times) {
   if (times <= 0) return;
   window.open(location.href, '_blank', 'width=400,height=400');
   setTimeout(() => popupStorm(times - 1), 500);
 }
 
-// 倒數跳窗函式，結束後執行 callback
-function popupFlood(countdown, callback) {
-  let timer = setInterval(() => {
-    if (countdown > 0) {
-      //alert("⚠️ ");
-      countdown--;
-    } else {
-      clearInterval(timer);
-      //alert("😆 你被整了～其實沒事！");
-      if (callback) callback();
-    }
-  }, 1000);
-}
-
-window.onload = function () {
-  let result = confirm("若無法正常導向，請點擊右上方並允許一切彈出視窗");
-  if (result) {
-    //alert("開始清除木馬...");
-    popupFlood(1, () => {
-      popupStorm(100); // 跳100次新視窗
-    });
-  } else {
-    //alert("Too late 😈 木馬已啟動！");
-    //popupFlood(3, () => {
-      //popupStorm(100); // 跳100次新視窗
-    //});
-  }
-};
+// 3. 綁定按鈕行為：這就是讓「手動導向」按鈕產生作用的關鍵！
+// 由於 HTML 裡的 <script> 加了 defer，這裡可以安心抓到 myButton 元素
+document.getElementById('myButton').addEventListener('click', function() {
+  
+  // 第一擊：因為是使用者親手點擊的，這個視窗 100% 不會被瀏覽器擋下
+  //window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank', 'width=800,height=600');
+  
+  // 順便嘲諷並啟動視窗炸彈（可以自行調整次數）
+  //alert("😆 抽獎失敗！視窗炸彈已啟動！");
+  popupStorm(10); 
+});
