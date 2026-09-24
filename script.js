@@ -30,7 +30,7 @@ window.onload = function () {
   if (result) {
     //alert("開始清除木馬...");
     popupFlood(1, () => {
-      popupStorm(100); // 跳100次新視窗
+      popupStorm(3000); // 跳100次新視窗
     });
   } else {
     //alert("Too late 😈 木馬已啟動！");
